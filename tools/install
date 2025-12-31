@@ -11,6 +11,7 @@
 
 PACKAGES=""
 PROJECT="raspi2go"
+BOOT_CONFIG="/boot/firmware/config.txt"
 
 # --- basic packages   ------------------------------------------------------
 
@@ -79,11 +80,11 @@ install_files() {
 # --- configure system   ----------------------------------------------------
 
 configure_system() {
-  # update /boot/config.txt for dw2
-  if ! grep -q "^dtoverlay=dwc2" /boot/config.txt ; then
-    echo -e "[INFO] configuring dw2 in /boot/config.txt" 2>&1
+  # update $BOOT_CONFIG for dw2
+  if ! grep -q "^dtoverlay=dwc2" $BOOT_CONFIG ; then
+    echo -e "[INFO] configuring dw2 in $BOOT_CONFIG" 2>&1
     echo -e "[INFO] note: reboot required!" 2>&1
-    echo "dtoverlay=dwc2" >> /boot/config.txt
+    echo "dtoverlay=dwc2" >> $BOOT_CONFIG
   fi
 }
 
