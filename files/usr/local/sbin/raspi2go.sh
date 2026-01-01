@@ -54,7 +54,8 @@ init_end() {
 # --- create mass-storage gagdet   -------------------------------------------
 
 create_storage() {
-  # create (sparse) backing-file if necessary
+
+  echo " create (sparse) backing-file if necessary"
   : "${USB_FILE:=/data/usb-mass-storage.img}"
   if [ ! -f "$USB_FILE" ]; then
     mkdir -p "${USB_FILE%/*}"
@@ -63,7 +64,7 @@ create_storage() {
     mkfs.${USB_FS_TYPE:-ext4} "$USB_FILE"
   fi
 
-  # configure gadget
+  echo "configure gadget"
   mkdir -p "functions/mass_storage.$NODE"
   echo 1 > "functions/mass_storage.$NODE/stall"
   echo 0 > "functions/mass_storage.$NODE/lun.0/cdrom"
@@ -72,6 +73,8 @@ create_storage() {
   echo "$USB_FILE" > "functions/mass_storage.$NODE/lun.0/file"
 
   ln -s "functions/mass_storage.$NODE" "configs/c.$C/"
+
+  echo "finished creating storage"
 }
 
 # --- create serial gadget   -------------------------------------------------
@@ -129,3 +132,5 @@ init_end
 
 # start additional services
 [ "$USB_SERIAL" = 1 ] && systemctl start serial-getty@ttyGS0.service
+
+echo "finished creating gadget"
